@@ -1,0 +1,16 @@
+{
+  "intents": [
+    {
+      "intent": "HelloIntent"
+    },
+    {
+      "intent": "CloseHandIntent"
+    },
+    {
+      "intent": "OpenHandIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    }
+  ]
+}

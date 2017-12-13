@@ -1,0 +1,11 @@
+HelloIntent say hello
+HelloIntent say hello world
+HelloIntent hello
+HelloIntent say hi
+HelloIntent say hi world
+HelloIntent hi
+HelloIntent how are you
+CloseHandIntent close
+CloseHandIntent close hand
+OpenHandIntent open
+OpenHandIntent open hand
