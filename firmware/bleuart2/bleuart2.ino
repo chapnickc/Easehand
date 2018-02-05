@@ -68,7 +68,7 @@ void setup(){
   startAdv();
 
   Serial.println("Attaching servo motor");
-  servo.attach(A1);  // attaches the servo on pin A1 to the servo object
+  servo.attach(9, 1000, 2000);  // attaches the servo on pin A1 to the servo object
 
   Serial.println("Please use Adafruit's Bluefruit LE app to connect in UART mode");
   Serial.println("Once connected, enter character(s) that you wish to send");
@@ -110,7 +110,7 @@ void finger_open(){
 
 
 void finger_close(){
-  for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+  for (pos = 180; pos >= 1; pos -= 1) { // goes from 180 degrees to 0 degrees
     servo.write(pos);              // tell servo to go to position in variable 'pos'
     delay(15);                       // waits 15ms for the servo to reach the position
   }
@@ -130,6 +130,7 @@ void loop(){
     else if (ch == 0x43) {
       finger_open();
     }
+
 }
 
 /*  // Forward data from HW Serial to BLEUART*/
