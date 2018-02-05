@@ -1,8 +1,15 @@
 {
   "intents": [
     {
-      "intent": "HelloIntent"
+      "intent": "HelloWorldIntent"
     },
+    {
+      "intent": "ConnectIntent"
+    },
+    {
+      "intent": "DisconnectIntent"
+    },
+
     {
       "intent": "CloseHandIntent"
     },
