@@ -12,12 +12,13 @@
  any redistribution
 *********************************************************************/
 #include <bluefruit.h>
-#include <Servo.h>
+/*#include <Servo.h>*/
 
-#define SERVO_PIN 7
+/*#define SERVO_PIN 7*/
 
 int OPEN = 0x4F;                          // O in utf8
 int CLOSED = 0x43;                        // C in utf8
+
 int pos = 0;                              // variable to store the servo position
 int lenMicroSecondsOfPeriod = 20 * 1000; // 20 milliseconds (ms)
 int lenMicroSecondsOfPulse = 1.0 * 1000; // 1.0 ms is 0 degrees
@@ -25,7 +26,7 @@ float userPulseLen = 0.0;
 
 
 
-Servo servo;
+/*Servo servo;*/
 
 // BLE Service
 BLEDis  bledis;
@@ -74,7 +75,7 @@ void setup(){
   startAdv();
 
   Serial.println("Configuring servo motor");
-  servo.attach(7, 750, 2200);  // attaches the pin to the servo object
+  /*servo.attach(7, 750, 2200);  // attaches the pin to the servo object*/
   /*pinMode(SERVO_PIN, OUTPUT);*/
 
   Serial.println("Please use Adafruit's Bluefruit LE app to connect in UART mode");
@@ -108,40 +109,40 @@ void startAdv(void){
   Bluefruit.Advertising.start(0);                // 0 = Don't stop advertising after n seconds  
 }
 
-void finger_close(){
-  for (pos = servo.read(); pos <= 180; pos += 1) {
-    servo.write(pos);
-    delay(15);                    // waits 15ms for the servo to reach the position
-  }
-}
+/*void finger_close(){*/
+  /*for (pos = servo.read(); pos <= 180; pos += 1) {*/
+    /*servo.write(pos);*/
+    /*delay(15);                    // waits 15ms for the servo to reach the position*/
+  /*}*/
+/*}*/
 
 
-void finger_open(){
-  for (pos = servo.read(); pos >= 1; pos -= 1) { // goes from 180 degrees to 0 degrees
-    servo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-}
+/*void finger_open(){*/
+  /*for (pos = servo.read(); pos >= 1; pos -= 1) { // goes from 180 degrees to 0 degrees*/
+    /*servo.write(pos);              // tell servo to go to position in variable 'pos'*/
+    /*delay(15);                       // waits 15ms for the servo to reach the position*/
+  /*}*/
+/*}*/
 
 
-void run_servo(){
-   // Servos work by sending a 20 ms pulse.  
-   // 1.0 ms at the start of the pulse will turn the servo to the 0 degree position
-   // 1.5 ms at the start of the pulse will turn the servo to the 90 degree position 
-   // 2.0 ms at the start of the pulse will turn the servo to the 180 degree position 
-   // Turn voltage high to start the period and pulse
-   digitalWrite(SERVO_PIN, HIGH);
+/*void run_servo(){*/
+   /*// Servos work by sending a 20 ms pulse.  */
+   /*// 1.0 ms at the start of the pulse will turn the servo to the 0 degree position*/
+   /*// 1.5 ms at the start of the pulse will turn the servo to the 90 degree position */
+   /*// 2.0 ms at the start of the pulse will turn the servo to the 180 degree position */
+   /*// Turn voltage high to start the period and pulse*/
+   /*digitalWrite(SERVO_PIN, HIGH);*/
 
-   // Delay for the length of the pulse
-   delayMicroseconds(lenMicroSecondsOfPulse);
+   /*// Delay for the length of the pulse*/
+   /*delayMicroseconds(lenMicroSecondsOfPulse);*/
 
-   // Turn the voltage low for the remainder of the pulse
-   digitalWrite(SERVO_PIN, LOW);
+   /*// Turn the voltage low for the remainder of the pulse*/
+   /*digitalWrite(SERVO_PIN, LOW);*/
 
-   // Delay this loop for the remainder of the period so we don't
-   // send the next signal too soon or too late
-   delayMicroseconds(lenMicroSecondsOfPeriod - lenMicroSecondsOfPulse); 
-}
+   /*// Delay this loop for the remainder of the period so we don't*/
+   /*// send the next signal too soon or too late*/
+   /*delayMicroseconds(lenMicroSecondsOfPeriod - lenMicroSecondsOfPulse); */
+/*}*/
 
 
 void loop(){
@@ -149,30 +150,17 @@ void loop(){
   uint8_t ch;
   while ( bleuart.available() ){
     ch = (uint8_t) bleuart.read();
-    Serial.write(ch);
 
-    if (ch == 0x4F){
-      lenMicroSecondsOfPulse = 1.0 * 1000;
-      finger_open();
-    }
-    else if (ch == 0x43) {
-      lenMicroSecondsOfPulse = 2.0 * 1000;
-      finger_close();
+    if (Serial){
+      Serial.println(ch);
     }
   }
 
-
-/*  // Forward data from HW Serial to BLEUART*/
-  /*while (Serial.available()){*/
-    /*// Delay to wait for enough input, since we have a limited transmission buffer*/
-    /*delay(2);*/
-
-    /*uint8_t buf[64];*/
-    /*int count = Serial.readBytes(buf, sizeof(buf));*/
-    /*bleuart.write( buf, count );*/
-/*  }*/
-
-  /*run_servo();*/
+ /* // Forward data from HW Serial to BLEUART*/
+  /*if (Serial.available()){*/
+    /*Serial.println(ch);*/
+    /*break*/
+  /*}*/
 
   // Request CPU to enter low-power mode until an event/interrupt occurs
   waitForEvent();

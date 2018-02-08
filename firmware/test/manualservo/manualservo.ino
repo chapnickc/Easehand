@@ -2,7 +2,7 @@
 // Copyright 2012 by Zipwhip. 
 // You are free to use and modify this code in your own software.
 
-#define SERVO_PIN       7  // Any pin on the Arduino or Mega will work.
+#define SERVO_PIN       9  // Any pin on the Arduino or Mega will work.
 
 int lenMicroSecondsOfPeriod = 20 * 1000; // 20 milliseconds (ms)
 int lenMicroSecondsOfPulse = 1.0 * 1000; // 1.0 ms is 0 degrees

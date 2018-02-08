@@ -17,7 +17,7 @@ int pos=90; //~neutral value for continuous rotation servo
 void setup()
 {
   /*myservo.attach(A1, 752, 2250); //servo control pin, and range if desired*/
-  myservo.attach(A1); //servo control pin, and range if desired
+  myservo.attach(9); //servo control pin, and range if desired
   Serial.begin(9600);
   Serial.println("serial servo incremental test code");
   Serial.println("type a character (s to increase or a to decrease)");
@@ -38,24 +38,24 @@ void loop()
       pos = readString.toInt();
     }
 
-    if(readString =="a\n"){
-      pos=pos-1; //use larger numbers for larger increments
-      if(pos<0) pos=0; //prevent negative number
-    }
-    if (readString =="s\n"){
-      pos=pos+1;
-    }
+    /*if(readString =="a\n"){*/
+      /*pos=pos-1; //use larger numbers for larger increments*/
+      /*if(pos<0) pos=0; //prevent negative number*/
+    /*}*/
+    /*if (readString =="s\n"){*/
+      /*pos=pos+1;*/
+    /*}*/
 
-    if(pos >= 400) //determine servo write method
-    {
-      Serial.println(pos);
-      myservo.writeMicroseconds(pos);
-    }
-    else
-    {   
+    /*if(pos >= 400) //determine servo write method*/
+    /*{*/
+      /*Serial.println(pos);*/
+      /*myservo.writeMicroseconds(pos);*/
+    /*}*/
+    /*else*/
+    /*{   */
       Serial.println(pos);
       myservo.write(pos); 
-    }
+    /*}*/
   }
   readString=""; //empty for next input
 }
