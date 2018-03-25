@@ -42,7 +42,6 @@ void setup(){
 
   delay(10);
 
-
   Serial.println("Once connected, enter character(s) that you wish to send");
 }
 
