@@ -1,34 +1,48 @@
-#include <Servo.h>
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 
-#define SERVO_PIN   9
+
+#define SERVO_MIN  200 // 'minimum' pulse length count (out of 4096)
+#define SERVO_MAX  700 // 'maximum' pulse length count (out of 4096)
+
 #define OPEN        0x4F
 #define CLOSED      0x43
 #define STOP        0x53
 
-Servo servo;
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+uint8_t servonum = 0;
+uint16_t pulselen = SERVO_MIN;
+
 
 void finger_close(){
-  for (int pos = servo.read(); pos <= 180; pos += 1) {
-    servo.write(pos);
-    delay(15);                    // waits 15ms for the servo to reach the position
+  for (pulselen = SERVO_MIN; pulselen < SERVO_MAX; pulselen++) {
+    pwm.setPWM(servonum, 0, pulselen);
+    delay(3);
   }
 }
 
 
 void finger_open(){
-  for (int pos = servo.read(); pos >= 1; pos -= 1) { // goes from 180 degrees to 0 degrees
-    servo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
+  for (pulselen = SERVO_MAX; pulselen > SERVO_MIN; pulselen--) {
+    pwm.setPWM(servonum, 0, pulselen);
+    delay(3);
   }
 }
-
-
 
 
 void setup(){
   Serial.begin(115200);
   Serial.println("Configuring servo motor");
-  servo.attach(SERVO_PIN);  // attaches the pin to the servo object
+
+  pwm.begin(); 
+  pwm.begin();
+  pwm.setPWMFreq(50);  // Analog servos run at ~60 Hz updates
+
+  delay(10);
+
+
   Serial.println("Once connected, enter character(s) that you wish to send");
 }
 
@@ -40,12 +54,14 @@ void loop(){
     ch = Serial.read();
     if (ch == OPEN){
       finger_open();
+      delay(500);
     }
     else if (ch == CLOSED) {
       finger_close();
+      delay(500);
     }
     else if (ch == 0x52){
-      servo.write(0);
+      pwm.setPWM(0, 0, 205);
     }
   }
 }

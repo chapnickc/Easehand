@@ -12,21 +12,17 @@
  any redistribution
 *********************************************************************/
 #include <bluefruit.h>
-/*#include <Servo.h>*/
-
-/*#define SERVO_PIN 7*/
-
-int OPEN = 0x4F;                          // O in utf8
-int CLOSED = 0x43;                        // C in utf8
-
-int pos = 0;                              // variable to store the servo position
-int lenMicroSecondsOfPeriod = 20 * 1000; // 20 milliseconds (ms)
-int lenMicroSecondsOfPulse = 1.0 * 1000; // 1.0 ms is 0 degrees
-float userPulseLen = 0.0;
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 
 
+#define SERVO_MIN  205
+#define SERVO_MAX  700 // 'maximum' pulse length count (out of 4096)
 
-/*Servo servo;*/
+#define OPEN        0x4F
+#define CLOSED      0x43
+#define STOP        0x53
+
 
 // BLE Service
 BLEDis  bledis;
@@ -35,6 +31,31 @@ BLEBas  blebas;
 
 // Software Timer for blinking RED LED
 SoftwareTimer blinkTimer;
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+uint8_t servonum = 0;
+uint16_t pulselen = SERVO_MIN;
+
+void finger_close(){
+  for (pulselen = SERVO_MIN; pulselen < SERVO_MAX; pulselen++) {
+    pwm.setPWM(0, 0, pulselen);
+    pwm.setPWM(3, 0, pulselen);
+    delay(3);
+  }
+
+}
+
+
+void finger_open(){
+  for (pulselen = SERVO_MAX; pulselen > SERVO_MIN; pulselen--) {
+    pwm.setPWM(0, 0, pulselen);
+    pwm.setPWM(3, 0, pulselen);
+    delay(3);
+  }
+
+}
+
 
 
 void setup(){
@@ -75,8 +96,13 @@ void setup(){
   startAdv();
 
   Serial.println("Configuring servo motor");
-  /*servo.attach(7, 750, 2200);  // attaches the pin to the servo object*/
-  /*pinMode(SERVO_PIN, OUTPUT);*/
+  pwm.begin(); 
+  pwm.begin();
+  pwm.setPWMFreq(50);  // Analog servos run at ~60 Hz updates
+
+  delay(10);
+
+
 
   Serial.println("Please use Adafruit's Bluefruit LE app to connect in UART mode");
   Serial.println("Once connected, enter character(s) that you wish to send");
@@ -109,40 +135,6 @@ void startAdv(void){
   Bluefruit.Advertising.start(0);                // 0 = Don't stop advertising after n seconds  
 }
 
-/*void finger_close(){*/
-  /*for (pos = servo.read(); pos <= 180; pos += 1) {*/
-    /*servo.write(pos);*/
-    /*delay(15);                    // waits 15ms for the servo to reach the position*/
-  /*}*/
-/*}*/
-
-
-/*void finger_open(){*/
-  /*for (pos = servo.read(); pos >= 1; pos -= 1) { // goes from 180 degrees to 0 degrees*/
-    /*servo.write(pos);              // tell servo to go to position in variable 'pos'*/
-    /*delay(15);                       // waits 15ms for the servo to reach the position*/
-  /*}*/
-/*}*/
-
-
-/*void run_servo(){*/
-   /*// Servos work by sending a 20 ms pulse.  */
-   /*// 1.0 ms at the start of the pulse will turn the servo to the 0 degree position*/
-   /*// 1.5 ms at the start of the pulse will turn the servo to the 90 degree position */
-   /*// 2.0 ms at the start of the pulse will turn the servo to the 180 degree position */
-   /*// Turn voltage high to start the period and pulse*/
-   /*digitalWrite(SERVO_PIN, HIGH);*/
-
-   /*// Delay for the length of the pulse*/
-   /*delayMicroseconds(lenMicroSecondsOfPulse);*/
-
-   /*// Turn the voltage low for the remainder of the pulse*/
-   /*digitalWrite(SERVO_PIN, LOW);*/
-
-   /*// Delay this loop for the remainder of the period so we don't*/
-   /*// send the next signal too soon or too late*/
-   /*delayMicroseconds(lenMicroSecondsOfPeriod - lenMicroSecondsOfPulse); */
-/*}*/
 
 
 void loop(){
@@ -151,16 +143,25 @@ void loop(){
   while ( bleuart.available() ){
     ch = (uint8_t) bleuart.read();
 
-    if (Serial){
-      Serial.println(ch);
-    }
-  }
+    // Forward data from HW Serial to BLEUART
+    Serial.println((char)ch);
 
- /* // Forward data from HW Serial to BLEUART*/
-  /*if (Serial.available()){*/
-    /*Serial.println(ch);*/
-    /*break*/
-  /*}*/
+    /*if (Serial){ Serial.print((char)ch); }*/
+
+    if (ch == OPEN){
+      finger_open();
+      delay(500);
+    }
+    else if (ch == CLOSED) {
+      finger_close();
+      delay(500);
+    }
+    else if (ch == 0x52){
+      pwm.setPWM(0, 0, 205);
+    }
+
+
+  }
 
   // Request CPU to enter low-power mode until an event/interrupt occurs
   waitForEvent();
