@@ -16,8 +16,9 @@
 #include <Adafruit_PWMServoDriver.h>
 
 
+#define PWM_FREQ   50 // 330
 #define SERVO_MIN  205
-#define SERVO_MAX  700 // 'maximum' pulse length count (out of 4096)
+#define SERVO_MAX  800 // 'maximum' pulse length count (out of 4096)
 
 #define OPEN        0x4F
 #define CLOSED      0x43
@@ -98,7 +99,7 @@ void setup(){
   Serial.println("Configuring servo motor");
   pwm.begin(); 
   pwm.begin();
-  pwm.setPWMFreq(50);  // Analog servos run at ~60 Hz updates
+  pwm.setPWMFreq(PWM_FREQ);  // Analog servos run at ~60 Hz updates
 
   delay(10);
 
