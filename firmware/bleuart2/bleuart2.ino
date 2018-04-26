@@ -20,8 +20,8 @@
 #define SERVO_MIN  205
 #define SERVO_MAX  800 // 'maximum' pulse length count (out of 4096)
 
-#define PIN_FINGER_ONE 1
-#define PIN_FINGER_TWO 3
+#define PIN_FINGER_ONE 3
+#define PIN_FINGER_TWO 1
 
 #define OPEN        0x4F // O
 #define CLOSED      0x43 // C
@@ -82,12 +82,14 @@ void finger_close(){
   }
 }
 
+
 void finger_one_open(){ 
   for (pulselen_ONE = pulselen_ONE; pulselen_ONE > SERVO_MIN; pulselen_ONE--) {
     pwm.setPWM(PIN_FINGER_ONE, 0, pulselen_ONE);
     delay(3);
   }
 }
+
 
 void finger_two_open(){ 
   for (pulselen_TWO = pulselen_TWO; pulselen_TWO > SERVO_MIN; pulselen_TWO--) {
@@ -104,13 +106,13 @@ void finger_one_close(){
   }
 }
 
+
 void finger_two_close(){ 
   for (pulselen_TWO = pulselen_TWO; pulselen_TWO < SERVO_MAX; pulselen_TWO++) {
     pwm.setPWM(PIN_FINGER_TWO, 0, pulselen_TWO);
     delay(3);
   }
 }
-
 
 
 void setup(){
@@ -166,6 +168,7 @@ void setup(){
   Serial.println("Once connected, enter character(s) that you wish to send");
 }
 
+
 void startAdv(void){
   // Advertising packet
   Bluefruit.Advertising.addFlags(BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE);
@@ -192,8 +195,6 @@ void startAdv(void){
   Bluefruit.Advertising.setFastTimeout(30);      // number of seconds in fast mode
   Bluefruit.Advertising.start(0);                // 0 = Don't stop advertising after n seconds  
 }
-
-
 
 void loop(){
   // Forward from BLEUART to HW Serial

@@ -1,0 +1,89 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "the hand",
+            "intents": [
+                {
+                    "name": "HelloWorldIntent",
+                    "slots": [],
+                    "samples": [
+                        "say hello",
+                        "hello",
+                        "say hi",
+                        "say hi world",
+                        "hi",
+                        "how are you"
+                    ]
+                },
+                {
+                    "name": "ConnectIntent",
+                    "slots": [],
+                    "samples": [
+                        "connect",
+                        "connect device"
+                    ]
+                },
+                {
+                    "name": "DisconnectIntent",
+                    "slots": [],
+                    "samples": [
+                        "disconnect",
+                        "disconnect device"
+                    ]
+                },
+                {
+                    "name": "CloseHandIntent",
+                    "slots": [],
+                    "samples": [
+                        "close",
+                        "grip",
+                        "close hand"
+                    ]
+                },
+                {
+                    "name": "OpenHandIntent",
+                    "slots": [],
+                    "samples": [
+                        "open",
+                        "open hand",
+                        "relax"
+                    ]
+                },
+                {
+                    "name": "FingerOneOpenIntent",
+                    "slots": [],
+                    "samples": [
+                        "open finger one",
+                        "point"
+                    ]
+                },
+                {
+                    "name": "FingerOneCloseIntent",
+                    "slots": [],
+                    "samples": [
+                        "close finger one"
+                    ]
+                },
+                {
+                    "name": "FingerTwoOpenIntent",
+                    "slots": [],
+                    "samples": [
+                        "open finger two"
+                    ]
+                },
+                {
+                    "name": "FingerTwoCloseIntent",
+                    "slots": [],
+                    "samples": [
+                        "close finger two"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                }
+            ],
+            "types": []
+        }
+    }
+}
