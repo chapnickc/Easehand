@@ -20,6 +20,9 @@
 #define SERVO_MIN  205
 #define SERVO_MAX  800 // 'maximum' pulse length count (out of 4096)
 
+#define PIN_FINGER_ONE 1
+#define PIN_FINGER_TWO 3
+
 #define OPEN        0x4F
 #define CLOSED      0x43
 #define STOP        0x53
@@ -39,9 +42,9 @@ uint8_t servonum = 0;
 uint16_t pulselen = SERVO_MIN;
 
 void finger_close(){
-  for (pulselen = SERVO_MIN; pulselen < SERVO_MAX; pulselen++) {
-    pwm.setPWM(0, 0, pulselen);
-    pwm.setPWM(3, 0, pulselen);
+  for (pulselen = pulselen; pulselen < SERVO_MAX; pulselen++) {
+    pwm.setPWM(PIN_FINGER_ONE, 0, pulselen);
+    pwm.setPWM(PIN_FINGER_TWO, 0, pulselen);
     delay(3);
   }
 
@@ -49,12 +52,11 @@ void finger_close(){
 
 
 void finger_open(){
-  for (pulselen = SERVO_MAX; pulselen > SERVO_MIN; pulselen--) {
-    pwm.setPWM(0, 0, pulselen);
-    pwm.setPWM(3, 0, pulselen);
+  for (pulselen = pulselen; pulselen > SERVO_MIN; pulselen--) {
+    pwm.setPWM(PIN_FINGER_ONE, 0, pulselen);
+    pwm.setPWM(PIN_FINGER_TWO, 0, pulselen);
     delay(3);
   }
-
 }
 
 
@@ -98,11 +100,14 @@ void setup(){
 
   Serial.println("Configuring servo motor");
   pwm.begin(); 
-  pwm.begin();
   pwm.setPWMFreq(PWM_FREQ);  // Analog servos run at ~60 Hz updates
 
-  delay(10);
+  // init servo position
+  pwm.setPWM(PIN_FINGER_ONE, 0, pulselen);
+  pwm.setPWM(PIN_FINGER_TWO, 0, pulselen);
 
+
+  delay(10);
 
 
   Serial.println("Please use Adafruit's Bluefruit LE app to connect in UART mode");
@@ -160,7 +165,6 @@ void loop(){
     else if (ch == 0x52){
       pwm.setPWM(0, 0, 205);
     }
-
 
   }
 
