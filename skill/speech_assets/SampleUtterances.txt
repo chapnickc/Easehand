@@ -13,3 +13,8 @@ CloseHandIntent close hand
 OpenHandIntent relax
 OpenHandIntent open
 OpenHandIntent open hand
+FingerOneOpenIntent open finger one
+FingerOneOpenIntent point
+FingerOneCloseIntent close finger one
+FingerTwoOpenIntent open finger two
+FingerTwoCloseIntent close finger two

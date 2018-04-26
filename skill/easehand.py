@@ -65,6 +65,54 @@ def open_hand():
         return statement(speech_text).simple_card('Easehand', speech_text)
 
 
+@ask.intent('FingerOneOpenIntent')
+def open_finger_one():
+    global tx_char
+    try:
+        tx_char.write('a'.encode())
+        speech_text = 'Opening finger one'
+        return statement(speech_text).simple_card('Easehand', speech_text)
+    except (btle.BTLEException, NameError):
+        speech_text = 'Device not connected'
+        return statement(speech_text).simple_card('Easehand', speech_text)
+
+
+@ask.intent('FingerOneCloseIntent')
+def close_finger_one():
+    global tx_char
+    try:
+        tx_char.write('A'.encode())
+        speech_text = 'Closing finger one'
+        return statement(speech_text).simple_card('Easehand', speech_text)
+    except (btle.BTLEException, NameError):
+        speech_text = 'Device not connected'
+        return statement(speech_text).simple_card('Easehand', speech_text)
+
+
+@ask.intent('FingerTwoOpenIntent')
+def open_finger_two():
+    global tx_char
+    try:
+        tx_char.write('b'.encode())
+        speech_text = 'Opening finger two'
+        return statement(speech_text).simple_card('Easehand', speech_text)
+    except (btle.BTLEException, NameError):
+        speech_text = 'Device not connected'
+        return statement(speech_text).simple_card('Easehand', speech_text)
+
+
+@ask.intent('FingerTwoCloseIntent')
+def close_finger_two():
+    global tx_char
+    try:
+        tx_char.write('B'.encode())
+        speech_text = 'Closing finger two'
+        return statement(speech_text).simple_card('Easehand', speech_text)
+    except (btle.BTLEException, NameError):
+        speech_text = 'Device not connected'
+        return statement(speech_text).simple_card('Easehand', speech_text)
+
+
 @ask.intent('HelloWorldIntent')
 def hello_world():
     speech_text = 'Hello there!'

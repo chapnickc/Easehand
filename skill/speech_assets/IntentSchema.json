@@ -9,12 +9,23 @@
     {
       "intent": "DisconnectIntent"
     },
-
     {
       "intent": "CloseHandIntent"
     },
     {
       "intent": "OpenHandIntent"
+    },
+    {
+      "intent": "FingerOneOpenIntent"
+    },
+    {
+      "intent": "FingerOneCloseIntent"
+    },
+    {
+      "intent": "FingerTwoOpenIntent"
+    },
+    {
+      "intent": "FingerTwoCloseIntent"
     },
     {
       "intent": "AMAZON.HelpIntent"
