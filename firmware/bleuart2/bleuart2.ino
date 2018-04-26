@@ -23,9 +23,14 @@
 #define PIN_FINGER_ONE 1
 #define PIN_FINGER_TWO 3
 
-#define OPEN        0x4F
-#define CLOSED      0x43
-#define STOP        0x53
+#define OPEN        0x4F // O
+#define CLOSED      0x43 // C
+#define STOP        0x53 // S
+#define CLOSE_ONE   0x41 // A
+#define CLOSE_TWO   0x42 // B
+#define OPEN_ONE    0x61 // a
+#define OPEN_TWO    0x62 // b
+
 
 
 // BLE Service
@@ -40,21 +45,68 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 uint8_t servonum = 0;
 uint16_t pulselen = SERVO_MIN;
-
-void finger_close(){
-  for (pulselen = pulselen; pulselen < SERVO_MAX; pulselen++) {
-    pwm.setPWM(PIN_FINGER_ONE, 0, pulselen);
-    pwm.setPWM(PIN_FINGER_TWO, 0, pulselen);
-    delay(3);
-  }
-
-}
+uint16_t pulselen_ONE = SERVO_MIN;
+uint16_t pulselen_TWO = SERVO_MIN;
 
 
 void finger_open(){
-  for (pulselen = pulselen; pulselen > SERVO_MIN; pulselen--) {
-    pwm.setPWM(PIN_FINGER_ONE, 0, pulselen);
-    pwm.setPWM(PIN_FINGER_TWO, 0, pulselen);
+  if (pulselen_ONE != pulselen_TWO){
+    finger_one_open();
+    finger_two_open();
+  }
+  else {
+    for (pulselen = pulselen_ONE; pulselen > SERVO_MIN; pulselen--) {
+      pwm.setPWM(PIN_FINGER_ONE, 0, pulselen);
+      pwm.setPWM(PIN_FINGER_TWO, 0, pulselen);
+      delay(3);
+    }
+    pulselen_ONE = pulselen;
+    pulselen_TWO = pulselen;
+  }
+}
+
+
+void finger_close(){
+  if (pulselen_ONE != pulselen_TWO){
+    finger_one_close();
+    finger_two_close();
+  }
+  else {
+    for (pulselen = pulselen_ONE; pulselen < SERVO_MAX; pulselen++) {
+      pwm.setPWM(PIN_FINGER_ONE, 0, pulselen);
+      pwm.setPWM(PIN_FINGER_TWO, 0, pulselen);
+      delay(3);
+    }
+    pulselen_ONE = pulselen;
+    pulselen_TWO = pulselen;
+  }
+}
+
+void finger_one_open(){ 
+  for (pulselen_ONE = pulselen_ONE; pulselen_ONE > SERVO_MIN; pulselen_ONE--) {
+    pwm.setPWM(PIN_FINGER_ONE, 0, pulselen_ONE);
+    delay(3);
+  }
+}
+
+void finger_two_open(){ 
+  for (pulselen_TWO = pulselen_TWO; pulselen_TWO > SERVO_MIN; pulselen_TWO--) {
+    pwm.setPWM(PIN_FINGER_TWO, 0, pulselen_TWO);
+    delay(3);
+  }
+}
+
+
+void finger_one_close(){ 
+  for (pulselen_ONE = pulselen_ONE; pulselen_ONE < SERVO_MAX; pulselen_ONE++) {
+    pwm.setPWM(PIN_FINGER_ONE, 0, pulselen_ONE);
+    delay(3);
+  }
+}
+
+void finger_two_close(){ 
+  for (pulselen_TWO = pulselen_TWO; pulselen_TWO < SERVO_MAX; pulselen_TWO++) {
+    pwm.setPWM(PIN_FINGER_TWO, 0, pulselen_TWO);
     delay(3);
   }
 }
@@ -162,8 +214,21 @@ void loop(){
       finger_close();
       delay(500);
     }
-    else if (ch == 0x52){
-      pwm.setPWM(0, 0, 205);
+    else if (ch == OPEN_ONE){
+      finger_one_open();
+      delay(500);
+    }
+    else if (ch == OPEN_TWO){
+      finger_two_open();
+      delay(500);
+    }
+    else if (ch == CLOSE_ONE){
+      finger_one_close();
+      delay(500);
+    }
+    else if (ch == CLOSE_TWO){
+      finger_two_close();
+      delay(500);
     }
 
   }
