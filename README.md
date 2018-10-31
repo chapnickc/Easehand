@@ -34,7 +34,7 @@ the majority of the skill configuration.
 ## Contact
 
 This document is by no means a comprehensive overview of the system we implemented here.
-If you have any questions about the source code, or the hardware used 
+If you have any questions about the source code, or the hardware used, 
 please do not hesitate to reach out by opening an issue for this
 project! 
 
